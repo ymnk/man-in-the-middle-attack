@@ -1,0 +1,4 @@
+This program demonstrates man-in-the-middle attack with
+the key manipulation for ssh. JSch[1] will be used.
+
+[1] http://www.jcraft.com/jsch/
